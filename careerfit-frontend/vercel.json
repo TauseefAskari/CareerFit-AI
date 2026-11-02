@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://careerfit-ai-backend-mfp8.onrender.com/api/:path*"
+    }
+  ]
+}
