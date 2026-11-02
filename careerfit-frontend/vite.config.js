@@ -9,7 +9,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const apiTarget = new URL(
-    env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1'
+    env.VITE_API_BASE_URL || 'http://localhost:5000/api/v1',
+    'http://localhost:5000'
   ).origin;
 
   return {
