@@ -1,0 +1,6 @@
+{
+  "name": "CareerFit AI",
+  "description": "AI-Powered Resume Analyzer for job seekers. Evaluate resume compatibility against job descriptions, detect skill gaps, and get actionable recommendations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
