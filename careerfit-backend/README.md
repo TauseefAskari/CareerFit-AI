@@ -1,40 +1,89 @@
 # CareerFit Backend
 
-Beginner-friendly Express + MongoDB backend starter for CareerFit, an AI resume analyzer.
+Express + MongoDB API for CareerFit AI. The backend handles authentication, profile updates, resume upload parsing, and AI-powered resume-to-job analysis through the Gemini API.
+
+## Stack
+- Node.js
+- Express
+- MongoDB + Mongoose
+- JWT-based auth with HTTP-only cookies
+- Multer for file uploads
+- `pdf-parse` and `mammoth` for resume text extraction
+- ImageKit for avatar storage
+- Google Gemini for analysis scoring and recommendations
 
 ## Requirements
-- Node.js LTS
-- MongoDB Atlas account or local MongoDB
+- Node.js 18+ (LTS recommended)
+- MongoDB Atlas account or a local MongoDB instance
 - npm
+- A Gemini API key
+- An ImageKit private key if you want avatar uploads enabled
+
+## Environment variables
+Create a `.env` file in `careerfit-backend` with values similar to:
+
+```bash
+PORT=5000
+NODE_ENV=development
+CLIENT_URL=http://localhost:3000
+MONGODB_URI=mongodb://localhost:27017/careerfit
+JWT_SECRET=replace-with-a-long-random-secret
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-2.5-flash
+MAX_UPLOAD_MB=5
+IMAGEKIT_PRIVATE_KEY=your-imagekit-private-key
+```
+
+Notes:
+- `MONGODB_URI` is required for the API to start.
+- `JWT_SECRET` should be unique and private for each environment.
+- `IMAGEKIT_PRIVATE_KEY` is only needed for avatar upload support and should stay on the backend server.
+- Never commit `.env` files to source control.
 
 ## Setup
-1. Extract this ZIP and open a terminal in `careerfit-backend`.
+1. Open a terminal in `careerfit-backend`.
 2. Install dependencies:
    ```bash
    npm install
    ```
-3. Create `.env` and fill in `MONGODB_URI` and `JWT_SECRET`. Add `IMAGEKIT_PRIVATE_KEY` from your ImageKit dashboard to enable profile picture uploads; keep the private key in the backend `.env` only.
-4. In MongoDB Atlas, create a database user and allow your development IP address.
-5. Start the backend:
+3. Start the API in development mode:
    ```bash
    npm run dev
    ```
-6. Check `http://localhost:5000/api/health`.
+4. Check the health endpoint:
+   ```bash
+   http://localhost:5000/api/health
+   ```
 
-## Profile
-- `PUT /api/v1/auth/me` — update the authenticated user's name. Email is read-only.
-- `PUT /api/v1/auth/me/avatar` — upload a JPEG, PNG, or WebP profile picture up to 5 MB using the `avatar` multipart field.
-- `DELETE /api/v1/auth/me/avatar` — remove the profile picture.
+For production-style startup, use:
+```bash
+npm start
+```
 
-Avatar uploads require `IMAGEKIT_PRIVATE_KEY` in the backend `.env`. Keep this private key on the server and never add it to the frontend environment.
+## API overview
+### Health
+- `GET /api/health` — service/check status endpoint
 
-## Current starter endpoints
-- `GET /api/health` — server/database health
-- `POST /api/v1/resumes/upload` — upload one PDF or DOCX up to 5 MB and extract text
+### Authentication
+- `POST /api/v1/auth/register` — create a new user account
+- `POST /api/v1/auth/login` — log in and receive a secure cookie session
+- `POST /api/v1/auth/logout` — sign the user out
+- `GET /api/v1/auth/me` — fetch the current authenticated user
+- `PUT /api/v1/auth/me` — update profile details such as name
+- `PUT /api/v1/auth/me/avatar` — upload a profile avatar
+- `DELETE /api/v1/auth/me/avatar` — remove the current avatar
 
-The upload route is not authenticated yet; add authentication before using it with real resumes. Legacy `.doc` files are rejected because they need a separate parser/conversion strategy. Scanned/image-only PDFs need OCR.
+### Resume uploads
+- `POST /api/v1/resumes/upload` — upload a PDF or DOCX resume and extract text for analysis
 
-## Important
-- Never commit `.env`.
-- The AI SDK is installed, but the AI analysis route is intentionally not implemented yet.
-- Use fictional resumes during development and avoid logging extracted resume text.
+### Analysis
+- `POST /api/v1/analysis` — analyze a resume against a job description and return a compatibility score plus recommendations
+- `GET /api/v1/analysis` — list saved analyses for the authenticated user
+- `GET /api/v1/analysis/:id` — fetch a specific saved analysis
+
+## Important implementation notes
+- The backend uses HTTP-only cookies for auth, so the frontend must be configured to send credentials.
+- Resume uploads are restricted to supported file types and size limits.
+- `.doc` files are intentionally rejected because they require a separate conversion strategy.
+- Scanned or image-only PDFs may need OCR support before they can be analyzed reliably.
+- Use fictional resume data during local development and avoid logging raw extracted resume text in production logs.
