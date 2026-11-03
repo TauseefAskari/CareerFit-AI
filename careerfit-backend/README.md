@@ -4,7 +4,7 @@ Express + MongoDB API for CareerFit AI. The backend handles authentication, prof
 
 ## Stack
 - Node.js
-- Express
+- Express.js
 - MongoDB + Mongoose
 - JWT-based auth with HTTP-only cookies
 - Multer for file uploads
