@@ -2,6 +2,17 @@
 
 CareerFit AI is a full-stack resume analysis application that helps job seekers compare their resume against a target job description. It combines a React frontend with an Express + MongoDB backend and uses Gemini to generate a match score, strengths, skill gaps, and actionable improvement suggestions.
 
+## Live demo
+
+![Live status](https://img.shields.io/badge/status-live-brightgreen)
+
+- Frontend: https://career-fit-ai-omega.vercel.app/
+- Backend API: https://careerfit-ai-backend-mfp8.onrender.com/api/health
+
+## Homepage screenshot
+
+![CareerFit AI homepage](careerfit-frontend/public/careerfit-homepage.png)
+
 ## Project structure
 
 ```text
